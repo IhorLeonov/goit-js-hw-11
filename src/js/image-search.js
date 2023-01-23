@@ -14,7 +14,7 @@
 // ✅ 7. После первого запроса при каждом новом поиске выводить уведомление в котором будет написано сколько всего нашли изображений (свойство totalHits).
 // Текст уведомления "Hooray! We found totalHits images."
 // ✅ 8. Добавить отображение большой версии изображения с библиотекой SimpleLightbox для полноценной галереи.
-// 9. Сделать плавную прокрутку страницы после запроса и отрисовки каждой следующей группы изображений.
+// ✅ 9. Сделать плавную прокрутку страницы после запроса и отрисовки каждой следующей группы изображений.
 // ✅ 10. Вместо кнопки «Load more» можно сделать бесконечную загрузку изображений при прокрутке страницы.
 
 // import axios from 'axios';
@@ -46,9 +46,10 @@ function onLoadMore(entries, observer) {
         .pixabayApi()
         .then(data => {
           createImgMarkup(data.hits);
+          smoothScroll();
           if (
             imgApiService.page ===
-            Math.round(data.totalHits / imgApiService.perPage)
+            Math.ceil(data.totalHits / imgApiService.perPage)
           ) {
             observer.unobserve(guard);
             ImageIsOverMassege();
@@ -144,4 +145,22 @@ function ImageIsOverMassege() {
   Notiflix.Notify.info(
     "We're sorry, but you've reached the end of search results."
   );
+}
+
+function scrollUp() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
+
+function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
