@@ -1,7 +1,7 @@
-:root {
-  --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --animation-duration: 250ms;
-}
+// :root {
+//   --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+//   --animation-duration: 250ms;
+// }
 
 h1,
 h2,
@@ -66,11 +66,6 @@ p {
   }
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-}
-
 .gallery {
   margin-top: 15px;
   display: flex;
@@ -99,4 +94,20 @@ p {
 
 .info__item {
   text-align: center;
+}
+
+.load-more {
+  display: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+
+  height: 26px;
+  width: 120px;
+
+  font-size: 14px;
+  background-color: rgb(235, 255, 120);
+  border: 1px solid gray;
+  border-radius: 3px;
 }
