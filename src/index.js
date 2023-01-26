@@ -27,7 +27,7 @@ function onSearchClick(evt) {
   buttonUp.style.display = 'none';
 
   if (!findPictureApi.quary) {
-    Notiflix.Notify.info('Please, type something!');
+    emptyInputMessage();
     return;
   }
   findPictureApi
@@ -108,6 +108,7 @@ function createImageMarkup(arr) {
     )
     .join('');
 
+  // background-image: none;
   galleryBox.insertAdjacentHTML('beforeend', markup);
   summonSimpleLightbox();
 }
@@ -126,6 +127,10 @@ function badRequestMessage() {
 
 function goodRequestMessage(totalHits) {
   Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+}
+
+function emptyInputMessage() {
+  Notiflix.Notify.info('Please, type something!');
 }
 
 function resetMarkup() {
