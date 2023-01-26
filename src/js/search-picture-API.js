@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '32998270-2baa29d20b34632b2d37a1874';
 
-export class ImgApiService {
+export class FindPictureApi {
   constructor() {
     this.searchQuary = '';
     this.page = 1;
