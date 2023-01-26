@@ -55,6 +55,7 @@ function infinityScroll(entries, observer) {
         .then(({ hits, totalHits }) => {
           createImageMarkup(hits);
           smoothScroll();
+          hideButton();
           if (
             findPictureApi.page ===
             Math.ceil(totalHits / findPictureApi.perPage)
@@ -163,4 +164,10 @@ function summonSimpleLightbox() {
   };
   const lightbox = new SimpleLightbox('.gallery a', options);
   lightbox.refresh();
+}
+
+function hideButton() {
+  setTimeout(() => {
+    buttonUp.style.display = 'none';
+  }, 15000);
 }
