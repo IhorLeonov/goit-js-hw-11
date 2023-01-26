@@ -9,6 +9,7 @@ const searchForm = document.querySelector('#search-form');
 const galleryBox = document.querySelector('.gallery');
 const guard = document.querySelector('.js-guard');
 const buttonUp = document.querySelector('.js-up-btn');
+const bgImage = document.querySelector('.bg-image');
 const findPictureApi = new FindPictureApi();
 const observOptions = {
   root: null,
@@ -19,6 +20,7 @@ const observOptions = {
 let observer = new IntersectionObserver(infinityScroll, observOptions);
 searchForm.addEventListener('submit', onSearchClick);
 buttonUp.addEventListener('click', scrollUp);
+searchForm.searchQuery.addEventListener('input', hideBtnUp);
 
 function onSearchClick(evt) {
   evt.preventDefault();
@@ -40,6 +42,7 @@ function onSearchClick(evt) {
       resetMarkup();
       goodRequestMessage(totalHits);
       createImageMarkup(hits);
+      bgImage.style.backgroundImage = 'none';
       observer.observe(guard);
     })
     .catch(err => console.log(err.message));
@@ -166,8 +169,6 @@ function summonSimpleLightbox() {
   lightbox.refresh();
 }
 
-function hideButton() {
-  setTimeout(() => {
-    buttonUp.style.display = 'none';
-  }, 15000);
+function hideBtnUp() {
+  buttonUp.style.display = 'none';
 }

@@ -1,24 +1,27 @@
-<header class="header">
-  <div>
-  <form class="search-form" id="search-form">
-    <input
-      class="search-form__field js-search-field"
-      type="text"
-      name="searchQuery"
-      autocomplete="off"
-      placeholder="Search images..."
-    />
-    <button class="search-form__btn" type="submit">
-      <svg class="search-form__btn-icon">
-        <use href="./images/icon.svg#icon-search"></use>
+<div class="container">
+  <header class="header">
+    <form class="search-form" id="search-form">
+      <input
+        class="search-form__field js-search-field"
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button class="search-form__btn" type="submit">
+        <svg class="search-form__btn-icon">
+          <use href="./images/icon.svg#icon-search"></use>
+        </svg>
+      </button>
+    </form>
+  </header>
+  <div class="bg-image">
+    <div class="gallery"></div>
+    <div class="js-guard"></div>
+    <button type="button" class="up-btn js-up-btn">
+      <svg class="up-btn__icon">
+        <use href="./images/icon.svg#up-arrow-icon"></use>
       </svg>
     </button>
-  </form>
-</header>
-<div class="gallery"></div>
-<div class="js-guard"></div>
-<button type="button" class="up-btn js-up-btn">
-  <svg class="up-btn__icon">
-    <use href="./images/icon.svg#up-arrow-icon"></use>
-  </svg>
-</button></div>
+  </div>
+</div>
