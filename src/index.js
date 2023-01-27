@@ -5,46 +5,42 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { FindPictureApi } from './js/search-picture-API';
 
-const searchForm = document.querySelector('#search-form');
-const galleryBox = document.querySelector('.gallery');
-const guard = document.querySelector('.js-guard');
-const buttonUp = document.querySelector('.js-up-btn');
-const bgImage = document.querySelector('.bg-image');
-const findPictureApi = new FindPictureApi();
-const observOptions = {
-  root: null,
-  rootMargin: '300px',
-  threshold: 0,
+const refs = {
+  searchForm: document.querySelector('#search-form'),
+  galleryBox: document.querySelector('.gallery'),
+  guard: document.querySelector('.js-guard'),
+  buttonUp: document.querySelector('.js-up-btn'),
+  bgImage: document.querySelector('.bg-image'),
 };
 
-let observer = new IntersectionObserver(infinityScroll, observOptions);
-searchForm.addEventListener('submit', onSearchClick);
-buttonUp.addEventListener('click', scrollUp);
-searchForm.searchQuery.addEventListener('input', hideBtnUp);
+runSimpleLightbox();
+runIntersectionObserver();
 
-console.dir(bgImage.style.backgroundImage);
+const findPictureApi = new FindPictureApi();
+refs.searchForm.addEventListener('submit', onSearchClick);
+refs.buttonUp.addEventListener('click', scrollUp);
+refs.searchForm.searchQuery.addEventListener('input', hideBtnUp);
 
 async function onSearchClick(evt) {
   evt.preventDefault();
   try {
     findPictureApi.resetPage();
-    findPictureApi.quary = searchForm.searchQuery.value.trim();
+    findPictureApi.quary = refs.searchForm.searchQuery.value.trim();
     hideBtnUp();
 
     if (!findPictureApi.quary) {
       emptyInputMessage();
       resetMarkup();
       addBgImg();
-      observer.unobserve(guard);
+      observer.unobserve(refs.guard);
       return;
     }
-
     const { hits, totalHits } = await findPictureApi.pixabayApi();
 
     if (totalHits === 0) {
       resetMarkup();
       badRequestMessage();
-      observer.unobserve(guard);
+      observer.unobserve(refs.guard);
       addBgImg();
       hideBtnUp();
       return;
@@ -53,7 +49,7 @@ async function onSearchClick(evt) {
     goodRequestMessage(totalHits);
     createImageMarkup(hits);
     removeBgImg();
-    observer.observe(guard);
+    observer.observe(refs.guard);
   } catch (error) {
     console.log(error.message);
   }
@@ -71,11 +67,11 @@ async function infinityScroll(entries, observer) {
           findPictureApi.page === Math.ceil(totalHits / findPictureApi.perPage)
         ) {
           endCollectionMessage();
-          observer.unobserve(guard);
+          observer.unobserve(refs.guard);
         }
         createImageMarkup(hits);
         if (totalHits > findPictureApi.perPage) {
-          buttonUp.style.display = 'flex';
+          refs.buttonUp.style.display = 'flex';
           smoothScroll();
         }
       }
@@ -124,16 +120,51 @@ function createImageMarkup(arr) {
   </div>`
     )
     .join('');
-
-  // background-image: none;
-  galleryBox.insertAdjacentHTML('beforeend', markup);
-  summonSimpleLightbox();
+  refs.galleryBox.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
 }
 
 function endCollectionMessage() {
   Notiflix.Notify.info(
     "We're sorry, but you've reached the end of search results."
   );
+}
+
+function resetMarkup() {
+  refs.galleryBox.innerHTML = '';
+}
+
+function scrollUp() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+  refs.buttonUp.style.display = 'none';
+}
+
+function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+
+function hideBtnUp() {
+  refs.buttonUp.style.display = 'none';
+}
+
+function addBgImg() {
+  refs.bgImage.classList.add('bg-image');
+  refs.bgImage.classList.remove('bg-image-none');
+}
+
+function removeBgImg() {
+  refs.bgImage.classList.remove('bg-image');
+  refs.bgImage.classList.add('bg-image-none');
 }
 
 function badRequestMessage() {
@@ -150,48 +181,19 @@ function emptyInputMessage() {
   Notiflix.Notify.info('Please, type something!');
 }
 
-function resetMarkup() {
-  galleryBox.innerHTML = '';
-}
-
-function scrollUp() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-  buttonUp.style.display = 'none';
-}
-
-function smoothScroll() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
-
-function summonSimpleLightbox() {
+function runSimpleLightbox() {
   const options = {
     captionsData: 'alt',
     captionDelay: 250,
   };
-  const lightbox = new SimpleLightbox('.gallery a', options);
-  lightbox.refresh();
+  return (lightbox = new SimpleLightbox('.gallery a', options));
 }
 
-function hideBtnUp() {
-  buttonUp.style.display = 'none';
-}
-
-function addBgImg() {
-  bgImage.classList.add('bg-image');
-  bgImage.classList.remove('bg-image-none');
-}
-
-function removeBgImg() {
-  bgImage.classList.remove('bg-image');
-  bgImage.classList.add('bg-image-none');
+function runIntersectionObserver() {
+  const observOptions = {
+    root: null,
+    rootMargin: '300px',
+    threshold: 0,
+  };
+  return (observer = new IntersectionObserver(infinityScroll, observOptions));
 }
