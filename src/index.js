@@ -22,54 +22,67 @@ searchForm.addEventListener('submit', onSearchClick);
 buttonUp.addEventListener('click', scrollUp);
 searchForm.searchQuery.addEventListener('input', hideBtnUp);
 
-function onSearchClick(evt) {
-  evt.preventDefault();
-  findPictureApi.resetPage();
-  findPictureApi.quary = searchForm.searchQuery.value.trim();
-  buttonUp.style.display = 'none';
+console.dir(bgImage.style.backgroundImage);
 
-  if (!findPictureApi.quary) {
-    emptyInputMessage();
-    return;
-  }
-  findPictureApi
-    .pixabayApi()
-    .then(({ hits, totalHits }) => {
-      if (totalHits === 0) {
-        badRequestMessage();
-        return;
-      }
+async function onSearchClick(evt) {
+  evt.preventDefault();
+  try {
+    findPictureApi.resetPage();
+    findPictureApi.quary = searchForm.searchQuery.value.trim();
+    hideBtnUp();
+
+    if (!findPictureApi.quary) {
+      emptyInputMessage();
       resetMarkup();
-      goodRequestMessage(totalHits);
-      createImageMarkup(hits);
-      bgImage.style.backgroundImage = 'none';
-      observer.observe(guard);
-    })
-    .catch(err => console.log(err.message));
+      addBgImg();
+      observer.unobserve(guard);
+      return;
+    }
+
+    const { hits, totalHits } = await findPictureApi.pixabayApi();
+
+    if (totalHits === 0) {
+      resetMarkup();
+      badRequestMessage();
+      observer.unobserve(guard);
+      addBgImg();
+      hideBtnUp();
+      return;
+    }
+    resetMarkup();
+    goodRequestMessage(totalHits);
+    createImageMarkup(hits);
+    removeBgImg();
+    observer.observe(guard);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
-function infinityScroll(entries, observer) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      buttonUp.style.display = 'flex';
-      findPictureApi.incrementPage();
-      findPictureApi
-        .pixabayApi()
-        .then(({ hits, totalHits }) => {
-          createImageMarkup(hits);
+async function infinityScroll(entries, observer) {
+  try {
+    entries.forEach(async entry => {
+      if (entry.isIntersecting) {
+        findPictureApi.incrementPage();
+
+        const { hits, totalHits } = await findPictureApi.pixabayApi();
+
+        if (
+          findPictureApi.page === Math.ceil(totalHits / findPictureApi.perPage)
+        ) {
+          endCollectionMessage();
+          observer.unobserve(guard);
+        }
+        createImageMarkup(hits);
+        if (totalHits > findPictureApi.perPage) {
+          buttonUp.style.display = 'flex';
           smoothScroll();
-          hideButton();
-          if (
-            findPictureApi.page ===
-            Math.ceil(totalHits / findPictureApi.perPage)
-          ) {
-            endCollectionMessage();
-            observer.unobserve(guard);
-          }
-        })
-        .catch(err => console.log(err.message));
-    }
-  });
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 function createImageMarkup(arr) {
@@ -171,4 +184,14 @@ function summonSimpleLightbox() {
 
 function hideBtnUp() {
   buttonUp.style.display = 'none';
+}
+
+function addBgImg() {
+  bgImage.classList.add('bg-image');
+  bgImage.classList.remove('bg-image-none');
+}
+
+function removeBgImg() {
+  bgImage.classList.remove('bg-image');
+  bgImage.classList.add('bg-image-none');
 }

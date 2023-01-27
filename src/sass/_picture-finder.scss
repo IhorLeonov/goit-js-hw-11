@@ -37,6 +37,27 @@
   }
 }
 
+.bg-image-none {
+  margin-left: auto;
+  margin-right: auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  height: 700px;
+  max-width: 1600px;
+
+  @media screen and (max-width: 768px) {
+    background-image: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  @media screen and (min-width: 769px) {
+    height: 810px;
+    background-image: none;
+  }
+}
+
 p {
   margin: 0;
 }
