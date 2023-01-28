@@ -12,10 +12,19 @@ const refs = {
   buttonUp: document.querySelector('.js-up-btn'),
   bgImage: document.querySelector('.bg-image'),
 };
-runSimpleLightbox();
-runIntersectionObserver();
-
+const lightBoxOptions = {
+  captionsData: 'alt',
+  captionDelay: 250,
+};
+const observOptions = {
+  root: null,
+  rootMargin: '300px',
+  threshold: 0,
+};
+const lightbox = new SimpleLightbox('.gallery a', lightBoxOptions);
+const observer = new IntersectionObserver(infinityScroll, observOptions);
 const findPictureApi = new FindPictureApi();
+
 refs.searchForm.addEventListener('submit', onSearchClick);
 refs.buttonUp.addEventListener('click', scrollUp);
 refs.searchForm.searchQuery.addEventListener('input', hideBtnUp);
@@ -180,22 +189,23 @@ function emptyInputMessage() {
   Notiflix.Notify.info('Please, type something!');
 }
 
-function runSimpleLightbox() {
-  const options = {
-    captionsData: 'alt',
-    captionDelay: 250,
-  };
-  const lightbox = new SimpleLightbox('.gallery a', options);
-  return lightbox;
-}
+// function runSimpleLightbox() {
+//   const options = {
+//     captionsData: 'alt',
+//     captionDelay: 250,
+//   };
+//   const lightbox = new SimpleLightbox('.gallery a', options);
+//   return lightbox;
+// }
 
-function runIntersectionObserver() {
-  const observOptions = {
-    root: null,
-    rootMargin: '300px',
-    threshold: 0,
-  };
+// function runIntersectionObserver() {
+//   const observOptions = {
+//     root: null,
+//     rootMargin: '300px',
+//     threshold: 0,
+//   };
 
-  const observer = new IntersectionObserver(infinityScroll, observOptions);
-  return observer;
-}
+//   const observer = new IntersectionObserver(infinityScroll, observOptions);
+//   return observer;
+// }
+////// так лайтбокс та обсервер на працюють, якщо викликати ці функції на почтаку
