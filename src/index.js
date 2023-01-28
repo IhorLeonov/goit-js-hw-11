@@ -12,19 +12,8 @@ const refs = {
   buttonUp: document.querySelector('.js-up-btn'),
   bgImage: document.querySelector('.bg-image'),
 };
-
-const options = {
-  captionsData: 'alt',
-  captionDelay: 250,
-};
-let lightbox = new SimpleLightbox('.gallery a', options);
-
-const observOptions = {
-  root: null,
-  rootMargin: '300px',
-  threshold: 0,
-};
-let observer = new IntersectionObserver(infinityScroll, observOptions);
+runSimpleLightbox();
+runIntersectionObserver();
 
 const findPictureApi = new FindPictureApi();
 refs.searchForm.addEventListener('submit', onSearchClick);
@@ -191,21 +180,22 @@ function emptyInputMessage() {
   Notiflix.Notify.info('Please, type something!');
 }
 
-// function runSimpleLightbox() {
-//   const options = {
-//     captionsData: 'alt',
-//     captionDelay: 250,
-//   };
-//   let lightbox = new SimpleLightbox('.gallery a', options);
-//   return lightbox;
-// }
+function runSimpleLightbox() {
+  const options = {
+    captionsData: 'alt',
+    captionDelay: 250,
+  };
+  const lightbox = new SimpleLightbox('.gallery a', options);
+  return lightbox;
+}
 
-// function runIntersectionObserver() {
-//   const observOptions = {
-//     root: null,
-//     rootMargin: '300px',
-//     threshold: 0,
-//   };
-//   let observer = new IntersectionObserver(infinityScroll, observOptions);
-//   return observer;
-// }
+function runIntersectionObserver() {
+  const observOptions = {
+    root: null,
+    rootMargin: '300px',
+    threshold: 0,
+  };
+
+  const observer = new IntersectionObserver(infinityScroll, observOptions);
+  return observer;
+}
