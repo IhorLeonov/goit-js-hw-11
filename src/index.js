@@ -13,8 +13,18 @@ const refs = {
   bgImage: document.querySelector('.bg-image'),
 };
 
-runSimpleLightbox();
-runIntersectionObserver();
+const options = {
+  captionsData: 'alt',
+  captionDelay: 250,
+};
+let lightbox = new SimpleLightbox('.gallery a', options);
+
+const observOptions = {
+  root: null,
+  rootMargin: '300px',
+  threshold: 0,
+};
+let observer = new IntersectionObserver(infinityScroll, observOptions);
 
 const findPictureApi = new FindPictureApi();
 refs.searchForm.addEventListener('submit', onSearchClick);
@@ -181,19 +191,21 @@ function emptyInputMessage() {
   Notiflix.Notify.info('Please, type something!');
 }
 
-function runSimpleLightbox() {
-  const options = {
-    captionsData: 'alt',
-    captionDelay: 250,
-  };
-  return (lightbox = new SimpleLightbox('.gallery a', options));
-}
+// function runSimpleLightbox() {
+//   const options = {
+//     captionsData: 'alt',
+//     captionDelay: 250,
+//   };
+//   let lightbox = new SimpleLightbox('.gallery a', options);
+//   return lightbox;
+// }
 
-function runIntersectionObserver() {
-  const observOptions = {
-    root: null,
-    rootMargin: '300px',
-    threshold: 0,
-  };
-  return (observer = new IntersectionObserver(infinityScroll, observOptions));
-}
+// function runIntersectionObserver() {
+//   const observOptions = {
+//     root: null,
+//     rootMargin: '300px',
+//     threshold: 0,
+//   };
+//   let observer = new IntersectionObserver(infinityScroll, observOptions);
+//   return observer;
+// }
