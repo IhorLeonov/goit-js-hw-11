@@ -16,13 +16,13 @@ const lightBoxOptions = {
   captionsData: 'alt',
   captionDelay: 250,
 };
-const observOptions = {
+const observerOptions = {
   root: null,
   rootMargin: '300px',
   threshold: 0,
 };
 const lightbox = new SimpleLightbox('.gallery a', lightBoxOptions);
-const observer = new IntersectionObserver(infinityScroll, observOptions);
+const observer = new IntersectionObserver(infinityScroll, observerOptions);
 const findPictureApi = new FindPictureApi();
 
 refs.searchForm.addEventListener('submit', onSearchClick);
@@ -132,12 +132,6 @@ function createImageMarkup(arr) {
   lightbox.refresh();
 }
 
-function endCollectionMessage() {
-  Notiflix.Notify.info(
-    "We're sorry, but you've reached the end of search results."
-  );
-}
-
 function resetMarkup() {
   refs.galleryBox.innerHTML = '';
 }
@@ -183,6 +177,12 @@ function badRequestMessage() {
 
 function goodRequestMessage(totalHits) {
   Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+}
+
+function endCollectionMessage() {
+  Notiflix.Notify.info(
+    "We're sorry, but you've reached the end of search results."
+  );
 }
 
 function emptyInputMessage() {
