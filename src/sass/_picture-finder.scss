@@ -27,7 +27,7 @@ p {
   }
 
   @media screen and (min-width: 1200px) {
-    max-width: 1280px;
+    max-width: 100%;
   }
 }
 
@@ -48,7 +48,7 @@ body {
 .bg-image {
   margin-left: auto;
   margin-right: auto;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 
   height: 700px;
